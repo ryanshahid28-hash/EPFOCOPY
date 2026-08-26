@@ -273,6 +273,14 @@ export default function EPFOLandingPage() {
     }
   };
 
+  // Dynamic Contribution Breakdown calculation based on active user's total balance
+  const rawBalance = (activeUser as any)?.balance || activeUser?.pfBalance || currentUser?.pfBalance;
+  const totalBalance = typeof rawBalance === 'number' 
+    ? rawBalance 
+    : (parseInt(String(rawBalance || '').replace(/[^0-9]/g, ''), 10) || 650200);
+  const employeeShare = Math.floor(totalBalance * 0.63); // Mocking a realistic 63% share
+  const employerShare = totalBalance - employeeShare; // Ensures the math is flawless
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 relative bg-grid-pattern selection:bg-blue-600 selection:text-white">
       {/* 1. TOP UTILITY BAR (High-Trust Government Branding) */}
@@ -729,7 +737,7 @@ export default function EPFOLandingPage() {
                 </h2>
                 <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-xl mb-6">
                   <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Total PF Balance</p>
-                  <p className="text-5xl font-bold text-emerald-900">{currentUser.pfBalance || "₹ 4,52,000"}</p>
+                  <p className="text-5xl font-bold text-emerald-900">₹ {totalBalance.toLocaleString('en-IN')}</p>
                 </div>
 
                 {/* Contribution Breakdown Grid */}
@@ -739,8 +747,8 @@ export default function EPFOLandingPage() {
                     <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">
                       Your Contribution
                     </p>
-                    <p className="text-xl sm:text-2xl font-bold text-blue-900">
-                      ₹ 4,10,000
+                    <p className="text-2xl font-bold text-blue-900">
+                      ₹ {employeeShare.toLocaleString('en-IN')}
                     </p>
                   </div>
 
@@ -749,8 +757,8 @@ export default function EPFOLandingPage() {
                     <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
                       Employer Contribution
                     </p>
-                    <p className="text-xl sm:text-2xl font-bold text-slate-900">
-                      ₹ 2,40,200
+                    <p className="text-2xl font-bold text-slate-900">
+                      ₹ {employerShare.toLocaleString('en-IN')}
                     </p>
                   </div>
                 </div>
