@@ -372,7 +372,13 @@ export default function EPFOLandingPage() {
               variants={cardVariants}
               whileHover={{ y: -8, scale: 1.015 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedIntent("Balance")}
+              onClick={() => {
+                if (!activeUser) {
+                  setShowLoginModal(true);
+                  return;
+                }
+                setSelectedIntent("Balance");
+              }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -413,7 +419,13 @@ export default function EPFOLandingPage() {
               variants={cardVariants}
               whileHover={{ y: -8, scale: 1.015 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedIntent("Withdrawal")}
+              onClick={() => {
+                if (!activeUser) {
+                  setShowLoginModal(true);
+                  return;
+                }
+                setSelectedIntent("Withdrawal");
+              }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -454,7 +466,13 @@ export default function EPFOLandingPage() {
               variants={cardVariants}
               whileHover={{ y: -8, scale: 1.015 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedIntent("Transfer")}
+              onClick={() => {
+                if (!activeUser) {
+                  setShowLoginModal(true);
+                  return;
+                }
+                setSelectedIntent("Transfer");
+              }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
