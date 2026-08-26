@@ -281,6 +281,11 @@ export default function EPFOLandingPage() {
     : (parseInt(String(rawBalance || '').replace(/[^0-9]/g, ''), 10) || 650200);
   const employeeShare = Math.floor(totalBalance * 0.63); // Mocking a realistic 63% share
   const employerShare = totalBalance - employeeShare; // Ensures the math is flawless
+  const displayIntents: Record<string, string> = {
+    'Emergency Medical Withdrawal': 'Medical Withdrawal',
+    'Transfer Past PF Account': 'Account Transfer'
+  };
+  const readableIntent = (selectedIntent && displayIntents[selectedIntent]) || selectedIntent;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 relative bg-grid-pattern selection:bg-blue-600 selection:text-white">
@@ -796,7 +801,7 @@ export default function EPFOLandingPage() {
                     Claim Receipt Generated!
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Your request for <strong className="text-slate-900">{selectedIntent}</strong> has been auto-sanctioned via Aadhaar e-KYC.
+                    Your request for <strong className="text-slate-900">{readableIntent}</strong> has been auto-sanctioned via Aadhaar e-KYC.
                   </p>
                 </div>
 
@@ -812,7 +817,7 @@ export default function EPFOLandingPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-slate-500">Requested Intent</span>
-                    <span className="font-bold text-blue-700">{selectedIntent}</span>
+                    <span className="font-bold text-blue-700">{readableIntent}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-slate-500">Submission Date</span>
