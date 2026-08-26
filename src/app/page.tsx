@@ -333,30 +333,31 @@ export default function EPFOLandingPage() {
 
       {/* 3. HERO SECTION */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-20 flex flex-col justify-center">
-        {/* Hero Header Content */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5">
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className={`${montserrat.className} text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]`}
-          >
-            What do you want to <br className="hidden sm:inline" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-800 via-blue-700 to-indigo-900">
-              do today?
-            </span>
-          </motion.h1>
+        {/* Hero Header Content (Hidden when logged in) */}
+        {!activeUser && (
+          <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5 mb-8 sm:mb-12">
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className={`${montserrat.className} text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]`}
+            >
+              What do you want to <br className="hidden sm:inline" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-800 via-blue-700 to-indigo-900">
+                do today?
+              </span>
+            </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className={`${montserrat.className} text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed`}
-          >
-            Access your PF, file emergency claims, and merge accounts in one click.
-          </motion.p>
-        </div>
-
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className={`${montserrat.className} text-xs sm:text-sm uppercase tracking-widest text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed`}
+            >
+              Access your PF, file emergency claims, and merge accounts in one click.
+            </motion.p>
+          </div>
+        )}
 
         {/* 4. CONDITIONAL RENDERING WORKFLOW (INTENT CARDS -> KYC CHECKLIST -> SUCCESS RECEIPT) */}
         {selectedIntent === null ? (
@@ -365,7 +366,9 @@ export default function EPFOLandingPage() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+            className={`grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 transition-all duration-300 ${
+              activeUser ? "mt-4 sm:mt-6" : "mt-2 sm:mt-4"
+            }`}
           >
             {/* CARD 1: Check PF Balance */}
             <motion.div
@@ -744,8 +747,10 @@ export default function EPFOLandingPage() {
           </motion.div>
         )}
 
-        {/* 5. TRUST & STATISTICS BANNER */}
-        <DirectCitizenAssurance montserratClass={montserrat.className} />
+        {/* 5. TRUST & STATISTICS BANNER (Hidden when logged in) */}
+        {!activeUser && (
+          <DirectCitizenAssurance montserratClass={montserrat.className} />
+        )}
       </main>
 
       {/* 6. FOOTER */}
