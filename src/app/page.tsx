@@ -53,7 +53,7 @@ interface CounterStatProps {
   label: string;
   colorClass?: string;
   decimals?: number;
-  montserratClass: string;
+  montserratClass?: string;
   isInView: boolean;
 }
 
@@ -62,78 +62,71 @@ function CounterStatItem({
   target,
   suffix = "",
   label,
-  colorClass = "text-blue-900",
+  colorClass = "text-slate-900",
   decimals = 0,
-  montserratClass,
+  montserratClass = "",
   isInView,
 }: CounterStatProps) {
-  const [displayValue, setDisplayValue] = useState<string>("0");
+  const [displayValue, setDisplayValue] = useState<string>(
+    (0).toFixed(decimals)
+  );
 
   useEffect(() => {
     if (isInView) {
       const controls = animate(0, target, {
-        duration: 1.5,
-        ease: "easeOut",
+        duration: 2.0,
+        ease: [0.16, 1, 0.3, 1],
         onUpdate(value) {
           setDisplayValue(value.toFixed(decimals));
         },
       });
       return () => controls.stop();
+    } else {
+      setDisplayValue((0).toFixed(decimals));
     }
   }, [isInView, target, decimals]);
 
   return (
-    <div className="text-center sm:text-left">
-      <div className={`${montserratClass} text-2xl sm:text-3xl font-extrabold ${colorClass} tracking-tight`}>
-        <span>{prefix}</span>
-        <span>{isInView ? displayValue : "0"}</span>
-        <span>{suffix}</span>
-      </div>
-      <p className="text-xs uppercase tracking-widest text-slate-500 font-medium mt-1">
-        {label}
-      </p>
+    <div>
+      <span className={`block text-xl font-black ${colorClass} ${montserratClass}`}>
+        {prefix}
+        {displayValue}
+        {suffix}
+      </span>
+      <span className="text-xs text-slate-500 font-medium">{label}</span>
     </div>
   );
 }
 
-export function DirectCitizenAssurance({ montserratClass }: { montserratClass: string }) {
+export function DirectCitizenAssurance({ montserratClass }: { montserratClass?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-20px" });
+  const isInView = useInView(containerRef, { once: true, amount: 0.3 });
 
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, y: 16 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-      transition={{ duration: 0.5 }}
-      className="mt-8 max-w-5xl mx-auto w-full bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md p-6 sm:p-7 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="mt-16 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-6"
     >
-      {/* Left Section */}
-      <div className="flex items-center gap-4 text-left w-full lg:w-auto">
-        <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0 shadow-xs">
-          <ShieldCheck className="w-6 h-6 text-blue-600" />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
+          <ShieldCheck className="w-5 h-5" />
         </div>
         <div>
-          <h3 className={`${montserratClass} text-sm font-semibold text-blue-900 uppercase tracking-widest`}>
-            Direct Citizen Assurance
-          </h3>
-          <p className="text-xs text-slate-500 font-normal mt-0.5">
-            Secured via DigiLocker & Aadhaar e-KYC
-          </p>
+          <h4 className="text-sm font-bold text-slate-900">Direct Citizen Assurance</h4>
+          <p className="text-xs text-slate-500">Secured via DigiLocker & Aadhaar e-KYC</p>
         </div>
       </div>
 
-      {/* Divider on desktop */}
-      <div className="hidden lg:block w-px h-10 bg-slate-200" />
-
-      {/* Right Section: 3 Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full lg:w-auto justify-items-center sm:justify-items-start">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-12">
         <CounterStatItem
           target={6.8}
           decimals={1}
           suffix=" Cr+"
           label="Active Accounts"
-          colorClass="text-blue-900"
+          colorClass="text-slate-900"
           montserratClass={montserratClass}
           isInView={isInView}
         />
@@ -147,15 +140,17 @@ export function DirectCitizenAssurance({ montserratClass }: { montserratClass: s
           montserratClass={montserratClass}
           isInView={isInView}
         />
-        <CounterStatItem
-          target={8.25}
-          decimals={2}
-          suffix="%"
-          label="Current Interest Rate"
-          colorClass="text-indigo-900"
-          montserratClass={montserratClass}
-          isInView={isInView}
-        />
+        <div className="hidden sm:block">
+          <CounterStatItem
+            target={8.25}
+            decimals={2}
+            suffix="%"
+            label="Current Interest Rate"
+            colorClass="text-blue-700"
+            montserratClass={montserratClass}
+            isInView={isInView}
+          />
+        </div>
       </div>
     </motion.div>
   );
@@ -732,37 +727,7 @@ export default function EPFOLandingPage() {
         )}
 
         {/* 5. TRUST & STATISTICS BANNER */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-16 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-6"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-slate-900">Direct Citizen Assurance</h4>
-              <p className="text-xs text-slate-500">Secured via DigiLocker & Aadhaar e-KYC</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-12">
-            <div>
-              <span className="block text-xl font-black text-slate-900">6.8 Cr+</span>
-              <span className="text-xs text-slate-500 font-medium">Active Accounts</span>
-            </div>
-            <div>
-              <span className="block text-xl font-black text-emerald-600">&lt; 24 Hrs</span>
-              <span className="text-xs text-slate-500 font-medium">Avg Claim Sanction</span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="block text-xl font-black text-blue-700">8.25%</span>
-              <span className="text-xs text-slate-500 font-medium">Current Interest Rate</span>
-            </div>
-          </div>
-        </motion.div>
+        <DirectCitizenAssurance montserratClass={montserrat.className} />
       </main>
 
       {/* 6. FOOTER */}
