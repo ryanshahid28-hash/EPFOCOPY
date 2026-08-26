@@ -463,7 +463,7 @@ export default function EPFOLandingPage() {
                   return;
                 }
                 window.history.pushState({ service: "active" }, "", "");
-                setSelectedIntent("Withdrawal");
+                setSelectedIntent("Emergency Medical Withdrawal");
               }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
             >
@@ -511,7 +511,7 @@ export default function EPFOLandingPage() {
                   return;
                 }
                 window.history.pushState({ service: "active" }, "", "");
-                setSelectedIntent("Transfer");
+                setSelectedIntent("Transfer Past PF Account");
               }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
             >
@@ -714,9 +714,11 @@ export default function EPFOLandingPage() {
                         </span>
                       ) : (
                         <span>
-                          {selectedIntent === "Check PF Balance" || selectedIntent === "Balance"
-                            ? "View Instant Passbook →"
-                            : "Proceed to Auto-Fill Claim →"}
+                          {selectedIntent === 'Check PF Balance' || selectedIntent === 'Balance'
+                            ? 'View Instant Passbook →'
+                            : selectedIntent === 'Transfer Past PF Account' || selectedIntent === 'Transfer'
+                            ? 'Proceed to Auto-Merge →'
+                            : 'Proceed to Auto-Fill Claim →'}
                         </span>
                       )}
                     </button>
@@ -827,8 +829,16 @@ export default function EPFOLandingPage() {
                     <span className="font-mono font-bold text-slate-800">{currentUser.uan}</span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                    <span className="text-slate-500">Est. Bank Disbursement</span>
-                    <span className="font-bold text-emerald-700">&lt; 24 Hours</span>
+                    <span className="text-slate-500">
+                      {selectedIntent === 'Transfer Past PF Account' || selectedIntent === 'Transfer'
+                        ? 'Est. Account Merge'
+                        : 'Est. Bank Disbursement'}
+                    </span>
+                    <span className="font-bold text-emerald-700">
+                      {selectedIntent === 'Transfer Past PF Account' || selectedIntent === 'Transfer'
+                        ? '3-5 Working Days'
+                        : '< 24 Hours'}
+                    </span>
                   </div>
                 </div>
 
