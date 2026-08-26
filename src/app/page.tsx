@@ -240,6 +240,18 @@ export default function EPFOLandingPage() {
 
   const kycStatus = validateKYC(currentUser);
 
+  const handleProceed = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      if (selectedIntent === 'Check PF Balance' || selectedIntent === 'Balance') {
+        setShowPassbook(true);
+      } else {
+        setClaimSubmitted(true);
+      }
+    }, 1000);
+  };
+
   // Framer Motion Animation Variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -657,20 +669,7 @@ export default function EPFOLandingPage() {
             ) : (
               <div className="pt-2">
                 <button
-                  onClick={() => {
-                    setIsProcessing(true);
-                    if (selectedIntent === "Check PF Balance" || selectedIntent === "Balance") {
-                      setTimeout(() => {
-                        setIsProcessing(false);
-                        setShowPassbook(true);
-                      }, 1000);
-                    } else {
-                      setTimeout(() => {
-                        setIsProcessing(false);
-                        setClaimSubmitted(true);
-                      }, 1500);
-                    }
-                  }}
+                  onClick={handleProceed}
                   className="w-full py-3.5 px-6 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 hover:from-blue-800 hover:to-indigo-950 shadow-md shadow-blue-800/20 hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>
@@ -699,77 +698,22 @@ export default function EPFOLandingPage() {
             </p>
           </motion.div>
         ) : showPassbook ? (
-          /* INSTANT PASSBOOK VIEW CARD (when showPassbook is true) */
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 16 }}
-            transition={{ duration: 0.4 }}
-            className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-blue-200 shadow-2xl space-y-6 text-center"
-          >
-            <div className="w-20 h-20 rounded-3xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 mx-auto shadow-sm">
-              <Wallet className="w-10 h-10" />
+          /* INSTANT PASSBOOK DASHBOARD UI */
+          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto border border-slate-100 text-center animate-in fade-in zoom-in duration-300 mt-14">
+            <h2 className={`${montserrat.className} text-xl font-medium text-slate-500 mb-6 uppercase tracking-widest`}>
+              Instant Passbook
+            </h2>
+            <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-xl mb-6">
+              <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Total PF Balance</p>
+              <p className="text-5xl font-bold text-emerald-900">{currentUser.pfBalance || "₹ 4,52,000"}</p>
             </div>
-
-            <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
-                Verified Passbook Statement
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                EPF Member Passbook
-              </h2>
-              <p className="text-xs text-slate-500">
-                Real-time balance statement for <strong className="text-slate-900">{currentUser.name}</strong>
-              </p>
-            </div>
-
-            {/* Passbook Details Card */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-white text-left space-y-4 shadow-md relative overflow-hidden">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-                <div>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-semibold">Total PF Balance</span>
-                  <span className="text-3xl font-black text-emerald-400 tracking-tight">{currentUser.pfBalance}</span>
-                </div>
-                <span className="px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Interest: 8.25%
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Universal Account No.</span>
-                  <span className="font-mono font-bold text-slate-200">{currentUser.uan}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Active Employer</span>
-                  <span className="font-semibold text-slate-200 truncate block">{currentUser.activeCompany}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">KYC Status</span>
-                  <span className="font-semibold text-emerald-400">Verified & Linked</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase">Last Updated</span>
-                  <span className="font-semibold text-slate-300">Today</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Return to Home Trigger */}
-            <div className="pt-3">
-              <button
-                onClick={() => {
-                  setSelectedIntent(null);
-                  setClaimSubmitted(false);
-                  setShowPassbook(false);
-                }}
-                className="w-full py-3.5 px-6 rounded-2xl font-bold text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-all cursor-pointer shadow-xs flex items-center justify-center gap-2"
-              >
-                <Home className="w-4 h-4 text-slate-600" />
-                <span>Return to Home</span>
-              </button>
-            </div>
-          </motion.div>
+            <button 
+              onClick={() => { setShowPassbook(false); setSelectedIntent(null); }} 
+              className="text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
+            >
+              ← Return to Dashboard
+            </button>
+          </div>
         ) : (
           /* STEP 4 & STEP 5: SUCCESS RECEIPT CARD (when claimSubmitted is true) */
           <motion.div
