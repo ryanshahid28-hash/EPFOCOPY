@@ -1013,11 +1013,9 @@ export default function EPFOLandingPage() {
                           )}
                         </div>
                         <p className="text-xs text-slate-500 font-mono">UAN: {persona.uan}</p>
-                        <p className="text-xs text-slate-600 font-medium">{persona.activeCompany}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-extrabold text-blue-700 block">{persona.pfBalance}</span>
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 mt-1 inline-block">
+                        <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block">
                           {persona.activeCompany}
                         </span>
                       </div>
