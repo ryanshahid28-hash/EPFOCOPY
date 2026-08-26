@@ -167,6 +167,19 @@ export default function EPFOLandingPage() {
   const [uanInput, setUanInput] = useState<string>("100456789012");
   const [lang, setLang] = useState<"en" | "hi">("en");
 
+  // Listen for browser native back button (popstate event)
+  useEffect(() => {
+    const handlePopState = () => {
+      setSelectedIntent(null);
+      setClaimSubmitted(false);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   // Sample data for Judge Mode presets
   const personas: UserPersona[] = [
     {
@@ -378,6 +391,7 @@ export default function EPFOLandingPage() {
                   setShowLoginModal(true);
                   return;
                 }
+                window.history.pushState({ service: "active" }, "", "");
                 setSelectedIntent("Balance");
               }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
@@ -425,6 +439,7 @@ export default function EPFOLandingPage() {
                   setShowLoginModal(true);
                   return;
                 }
+                window.history.pushState({ service: "active" }, "", "");
                 setSelectedIntent("Withdrawal");
               }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
@@ -472,6 +487,7 @@ export default function EPFOLandingPage() {
                   setShowLoginModal(true);
                   return;
                 }
+                window.history.pushState({ service: "active" }, "", "");
                 setSelectedIntent("Transfer");
               }}
               className="group relative bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer overflow-hidden"
