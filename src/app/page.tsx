@@ -244,12 +244,12 @@ export default function EPFOLandingPage() {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      if (selectedIntent === 'Check PF Balance' || selectedIntent === 'Balance') {
+      if (selectedIntent === 'Check PF Balance') {
         setShowPassbook(true);
       } else {
         setClaimSubmitted(true);
       }
-    }, 1000);
+    }, 1500);
   };
 
   // Framer Motion Animation Variants
@@ -539,275 +539,283 @@ export default function EPFOLandingPage() {
               </div>
             </motion.div>
           </motion.div>
-        ) : !claimSubmitted ? (
-          /* STEP 3: PRE-FLIGHT KYC CHECKLIST CARD (when selectedIntent is active and claimSubmitted is false) */
-          <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.4 }}
-            className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-xl space-y-6"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 font-bold">
-                  <BadgeCheck className="w-6 h-6" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-extrabold text-slate-900">Pre-Flight KYC Checklist</h2>
-                  <p className="text-xs text-slate-500">Selected Intent: <span className="font-bold text-blue-700">{selectedIntent}</span></p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSelectedIntent(null)}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1 cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Go Back</span>
-              </button>
-            </div>
-
-            {/* Active User Info */}
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs text-slate-600 font-medium">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-slate-500" />
-                <span>Citizen: <strong className="text-slate-900">{currentUser.name}</strong></span>
-              </div>
-              <span className="font-mono text-slate-500">UAN: {currentUser.uan}</span>
-            </div>
-
-            {/* Checklist Items reading from currentUser / activeUser */}
-            <div className="space-y-3">
-              {/* Item 1: UAN Status */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <UserCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm text-slate-900 block">UAN Status</span>
-                    <span className="text-xs text-slate-500">Unified Account Number Active</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Active</span>
-                </span>
-              </div>
-
-              {/* Item 2: Aadhaar Linked */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm text-slate-900 block">Aadhaar Linked</span>
-                    <span className="text-xs text-slate-500">UIDAI e-KYC Verified</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>{currentUser.aadhaarLinked ? "Yes" : "No"}</span>
-                </span>
-              </div>
-
-              {/* Item 3: Bank Verified */}
-              <div className={`p-4 rounded-2xl border transition-all flex items-center justify-between ${
-                kycStatus.isBankVerified
-                  ? "bg-slate-50 border-slate-200/90"
-                  : "bg-red-50/80 border-red-200"
-              }`}>
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                    kycStatus.isBankVerified ? "bg-emerald-50 text-emerald-600" : "bg-red-100 text-red-600"
-                  }`}>
-                    <CreditCard className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm text-slate-900 block">Bank Verified</span>
-                    <span className={`text-xs ${kycStatus.isBankVerified ? "text-slate-500" : "text-red-600 font-medium"}`}>
-                      {kycStatus.isBankVerified ? "Direct Benefit Transfer Ready" : "Bank record unverified"}
-                    </span>
-                  </div>
-                </div>
-                <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${
-                  kycStatus.isBankVerified
-                    ? "bg-emerald-100 text-emerald-800 border-emerald-200"
-                    : "bg-red-100 text-red-700 border-red-200"
-                }`}>
-                  {kycStatus.isBankVerified ? (
-                    <>
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Bank Verified: Yes</span>
-                    </>
-                  ) : (
-                    <span>Bank Verified: No (Action Required)</span>
-                  )}
-                </span>
-              </div>
-            </div>
-
-            {/* Action Buttons: Hidden Proceed when unverified, 1-Click Resolve button shown */}
-            {!kycStatus.isBankVerified ? (
-              <div className="pt-2 space-y-3">
-                <button
-                  onClick={() => {
-                    setActiveUser({
-                      ...currentUser,
-                      bankLinked: true,
-                      bankVerified: true,
-                    });
-                  }}
-                  className="w-full py-3.5 px-6 rounded-2xl font-bold text-xs sm:text-sm text-blue-900 bg-blue-50 border-2 border-blue-600 hover:bg-blue-100 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs"
-                >
-                  <span>1-Click Resolve: Authenticate Bank via OTP</span>
-                </button>
-              </div>
-            ) : (
-              <div className="pt-2">
-                <button
-                  onClick={handleProceed}
-                  disabled={isProcessing}
-                  className={`w-full py-3.5 px-6 rounded-2xl font-extrabold text-sm text-white transition-all flex items-center justify-center gap-2 ${
-                    isProcessing
-                      ? "bg-indigo-800/80 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 hover:from-blue-800 hover:to-indigo-950 shadow-md shadow-blue-800/20 hover:shadow-lg cursor-pointer"
-                  }`}
-                >
-                  {isProcessing ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg
-                        className="animate-spin h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>Securing Data...</span>
-                    </span>
-                  ) : (
-                    <span>
-                      {selectedIntent === "Check PF Balance" || selectedIntent === "Balance"
-                        ? "View Instant Passbook →"
-                        : "Proceed to Auto-Fill Claim →"}
-                    </span>
-                  )}
-                </button>
-              </div>
-            )}
-          </motion.div>
-        ) : showPassbook ? (
-          /* INSTANT PASSBOOK DASHBOARD UI */
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto border border-slate-100 text-center mt-14"
-          >
-            <h2 className={`${montserrat.className} text-xl font-medium text-slate-500 mb-6 uppercase tracking-widest`}>
-              Instant Passbook
-            </h2>
-            <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-xl mb-6">
-              <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Total PF Balance</p>
-              <p className="text-5xl font-bold text-emerald-900">{currentUser.pfBalance || "₹ 4,52,000"}</p>
-            </div>
-            <button 
-              onClick={() => { setShowPassbook(false); setSelectedIntent(null); }} 
-              className="text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
-            >
-              ← Return to Dashboard
-            </button>
-          </motion.div>
         ) : (
-          /* STEP 4 & STEP 5: SUCCESS RECEIPT CARD (when claimSubmitted is true) */
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 16 }}
-            transition={{ duration: 0.4 }}
-            className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-emerald-200 shadow-2xl space-y-6 text-center"
-          >
-            <div className="w-20 h-20 rounded-3xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto shadow-sm">
-              <FileCheck2 className="w-10 h-10" />
-            </div>
-
-            <div className="space-y-2">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
-                Auto-Sanctioned & Submitted
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                Claim Receipt Generated!
-              </h2>
-              <p className="text-xs text-slate-500">
-                Your request for <strong className="text-slate-900">{selectedIntent}</strong> has been auto-sanctioned via Aadhaar e-KYC.
-              </p>
-            </div>
-
-            {/* Receipt Summary Box */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3 text-xs">
-              <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                <span className="text-slate-500">Tracking Reference ID</span>
-                <span className="font-mono font-bold text-blue-700">EPFO-2026-984521098</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500">Beneficiary Name</span>
-                <span className="font-bold text-slate-900">{currentUser.name}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500">Requested Intent</span>
-                <span className="font-bold text-blue-700">{selectedIntent}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500">Submission Date</span>
-                <span className="font-medium text-slate-800">
-                  {new Date().toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500">UAN Number</span>
-                <span className="font-mono font-bold text-slate-800">{currentUser.uan}</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                <span className="text-slate-500">Est. Bank Disbursement</span>
-                <span className="font-bold text-emerald-700">&lt; 24 Hours</span>
-              </div>
-            </div>
-
-            {/* Step 5 Trigger: Click "Return to Home" */}
-            <div className="pt-3">
-              <button
-                onClick={() => {
-                  setSelectedIntent(null);
-                  setClaimSubmitted(false);
-                  setShowPassbook(false);
-                }}
-                className="w-full py-3.5 px-6 rounded-2xl font-bold text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-all cursor-pointer shadow-xs flex items-center justify-center gap-2"
+          <>
+            {/* STEP 3: PRE-FLIGHT KYC CHECKLIST CARD (when selectedIntent is active and claimSubmitted/showPassbook are false) */}
+            {!showPassbook && !claimSubmitted && (
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 16, scale: 0.98 }}
+                transition={{ duration: 0.4 }}
+                className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-xl space-y-6"
               >
-                <Home className="w-4 h-4 text-slate-600" />
-                <span>Return to Home</span>
-              </button>
-            </div>
-          </motion.div>
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-100 pb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                      <BadgeCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-extrabold text-slate-900">Pre-Flight KYC Checklist</h2>
+                      <p className="text-xs text-slate-500">Selected Intent: <span className="font-bold text-blue-700">{selectedIntent}</span></p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedIntent(null)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Go Back</span>
+                  </button>
+                </div>
+
+                {/* Active User Info */}
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs text-slate-600 font-medium">
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-slate-500" />
+                    <span>Citizen: <strong className="text-slate-900">{currentUser.name}</strong></span>
+                  </div>
+                  <span className="font-mono text-slate-500">UAN: {currentUser.uan}</span>
+                </div>
+
+                {/* Checklist Items reading from currentUser / activeUser */}
+                <div className="space-y-3">
+                  {/* Item 1: UAN Status */}
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <UserCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-sm text-slate-900 block">UAN Status</span>
+                        <span className="text-xs text-slate-500">Unified Account Number Active</span>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Active</span>
+                    </span>
+                  </div>
+
+                  {/* Item 2: Aadhaar Linked */}
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-sm text-slate-900 block">Aadhaar Linked</span>
+                        <span className="text-xs text-slate-500">UIDAI e-KYC Verified</span>
+                      </div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>{currentUser.aadhaarLinked ? "Yes" : "No"}</span>
+                    </span>
+                  </div>
+
+                  {/* Item 3: Bank Verified */}
+                  <div className={`p-4 rounded-2xl border transition-all flex items-center justify-between ${
+                    kycStatus.isBankVerified
+                      ? "bg-slate-50 border-slate-200/90"
+                      : "bg-red-50/80 border-red-200"
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                        kycStatus.isBankVerified ? "bg-emerald-50 text-emerald-600" : "bg-red-100 text-red-600"
+                      }`}>
+                        <CreditCard className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-sm text-slate-900 block">Bank Verified</span>
+                        <span className={`text-xs ${kycStatus.isBankVerified ? "text-slate-500" : "text-red-600 font-medium"}`}>
+                          {kycStatus.isBankVerified ? "Direct Benefit Transfer Ready" : "Bank record unverified"}
+                        </span>
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${
+                      kycStatus.isBankVerified
+                        ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                        : "bg-red-100 text-red-700 border-red-200"
+                    }`}>
+                      {kycStatus.isBankVerified ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Bank Verified: Yes</span>
+                        </>
+                      ) : (
+                        <span>Bank Verified: No (Action Required)</span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action Buttons: Hidden Proceed when unverified, 1-Click Resolve button shown */}
+                {!kycStatus.isBankVerified ? (
+                  <div className="pt-2 space-y-3">
+                    <button
+                      onClick={() => {
+                        setActiveUser({
+                          ...currentUser,
+                          bankLinked: true,
+                          bankVerified: true,
+                        });
+                      }}
+                      className="w-full py-3.5 px-6 rounded-2xl font-bold text-xs sm:text-sm text-blue-900 bg-blue-50 border-2 border-blue-600 hover:bg-blue-100 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs"
+                    >
+                      <span>1-Click Resolve: Authenticate Bank via OTP</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="pt-2">
+                    <button
+                      onClick={handleProceed}
+                      disabled={isProcessing}
+                      className={`w-full py-3.5 px-6 rounded-2xl font-extrabold text-sm text-white transition-all flex items-center justify-center gap-2 ${
+                        isProcessing
+                          ? "bg-indigo-800/80 cursor-not-allowed"
+                          : "bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 hover:from-blue-800 hover:to-indigo-950 shadow-md shadow-blue-800/20 hover:shadow-lg cursor-pointer"
+                      }`}
+                    >
+                      {isProcessing ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          <span>Securing Data...</span>
+                        </span>
+                      ) : (
+                        <span>
+                          {selectedIntent === "Check PF Balance" || selectedIntent === "Balance"
+                            ? "View Instant Passbook →"
+                            : "Proceed to Auto-Fill Claim →"}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* INSTANT PASSBOOK DASHBOARD UI */}
+            {showPassbook && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto border border-slate-100 text-center mt-14"
+              >
+                <h2 className={`${montserrat.className} text-xl font-medium text-slate-500 mb-6 uppercase tracking-widest`}>
+                  Instant Passbook
+                </h2>
+                <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-xl mb-6">
+                  <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Total PF Balance</p>
+                  <p className="text-5xl font-bold text-emerald-900">{currentUser.pfBalance || "₹ 4,52,000"}</p>
+                </div>
+                <button 
+                  onClick={() => { setShowPassbook(false); setSelectedIntent(null); }} 
+                  className="text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
+                >
+                  ← Return to Dashboard
+                </button>
+              </motion.div>
+            )}
+
+            {/* STEP 4 & STEP 5: SUCCESS RECEIPT CARD (when claimSubmitted is true) */}
+            {claimSubmitted && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 16 }}
+                transition={{ duration: 0.4 }}
+                className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-8 sm:p-10 border border-emerald-200 shadow-2xl space-y-6 text-center"
+              >
+                <div className="w-20 h-20 rounded-3xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto shadow-sm">
+                  <FileCheck2 className="w-10 h-10" />
+                </div>
+
+                <div className="space-y-2">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    Auto-Sanctioned & Submitted
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                    Claim Receipt Generated!
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Your request for <strong className="text-slate-900">{selectedIntent}</strong> has been auto-sanctioned via Aadhaar e-KYC.
+                  </p>
+                </div>
+
+                {/* Receipt Summary Box */}
+                <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3 text-xs">
+                  <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                    <span className="text-slate-500">Tracking Reference ID</span>
+                    <span className="font-mono font-bold text-blue-700">EPFO-2026-984521098</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Beneficiary Name</span>
+                    <span className="font-bold text-slate-900">{currentUser.name}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Requested Intent</span>
+                    <span className="font-bold text-blue-700">{selectedIntent}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Submission Date</span>
+                    <span className="font-medium text-slate-800">
+                      {new Date().toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">UAN Number</span>
+                    <span className="font-mono font-bold text-slate-800">{currentUser.uan}</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2 border-t border-slate-200">
+                    <span className="text-slate-500">Est. Bank Disbursement</span>
+                    <span className="font-bold text-emerald-700">&lt; 24 Hours</span>
+                  </div>
+                </div>
+
+                {/* Step 5 Trigger: Click "Return to Home" */}
+                <div className="pt-3">
+                  <button
+                    onClick={() => {
+                      setSelectedIntent(null);
+                      setClaimSubmitted(false);
+                      setShowPassbook(false);
+                    }}
+                    className="w-full py-3.5 px-6 rounded-2xl font-bold text-sm text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-all cursor-pointer shadow-xs flex items-center justify-center gap-2"
+                  >
+                    <Home className="w-4 h-4 text-slate-600" />
+                    <span>Return to Home</span>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </>
         )}
 
         {/* 5. TRUST & STATISTICS BANNER (Hidden when a service intent is selected) */}
