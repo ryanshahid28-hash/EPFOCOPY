@@ -731,6 +731,30 @@ export default function EPFOLandingPage() {
                   <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Total PF Balance</p>
                   <p className="text-5xl font-bold text-emerald-900">{currentUser.pfBalance || "₹ 4,52,000"}</p>
                 </div>
+
+                {/* Contribution Breakdown Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {/* Left Card: Your Contribution */}
+                  <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl text-center">
+                    <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">
+                      Your Contribution
+                    </p>
+                    <p className="text-xl sm:text-2xl font-bold text-blue-900">
+                      ₹ 4,10,000
+                    </p>
+                  </div>
+
+                  {/* Right Card: Employer Contribution */}
+                  <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                      Employer Contribution
+                    </p>
+                    <p className="text-xl sm:text-2xl font-bold text-slate-900">
+                      ₹ 2,40,200
+                    </p>
+                  </div>
+                </div>
+
                 <button 
                   onClick={() => { setShowPassbook(false); setSelectedIntent(null); }} 
                   className="text-slate-500 hover:text-slate-800 font-medium transition-colors cursor-pointer"
