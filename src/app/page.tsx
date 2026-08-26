@@ -670,36 +670,56 @@ export default function EPFOLandingPage() {
               <div className="pt-2">
                 <button
                   onClick={handleProceed}
-                  className="w-full py-3.5 px-6 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 hover:from-blue-800 hover:to-indigo-950 shadow-md shadow-blue-800/20 hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                  disabled={isProcessing}
+                  className={`w-full py-3.5 px-6 rounded-2xl font-extrabold text-sm text-white transition-all flex items-center justify-center gap-2 ${
+                    isProcessing
+                      ? "bg-indigo-800/80 cursor-not-allowed"
+                      : "bg-gradient-to-r from-blue-700 via-blue-800 to-indigo-900 hover:from-blue-800 hover:to-indigo-950 shadow-md shadow-blue-800/20 hover:shadow-lg cursor-pointer"
+                  }`}
                 >
-                  <span>
-                    {selectedIntent === "Check PF Balance" || selectedIntent === "Balance"
-                      ? "View Instant Passbook →"
-                      : "Proceed to Auto-Fill Claim →"}
-                  </span>
+                  {isProcessing ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span>Securing Data...</span>
+                    </span>
+                  ) : (
+                    <span>
+                      {selectedIntent === "Check PF Balance" || selectedIntent === "Balance"
+                        ? "View Instant Passbook →"
+                        : "Proceed to Auto-Fill Claim →"}
+                    </span>
+                  )}
                 </button>
               </div>
             )}
           </motion.div>
-        ) : isProcessing ? (
-          /* SIMULATED BACKEND PROCESSING STATE (LOADING SPINNER) */
-          <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.98 }}
-            transition={{ duration: 0.3 }}
-            className="mt-14 max-w-xl mx-auto w-full bg-white rounded-3xl p-12 sm:p-16 border border-slate-200 shadow-xl flex flex-col items-center justify-center text-center space-y-6 min-h-[350px]"
-          >
-            <div className="relative flex items-center justify-center">
-              <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-700 rounded-full animate-spin" />
-            </div>
-            <p className={`${montserrat.className} text-base sm:text-lg font-semibold text-slate-800 tracking-wide max-w-md leading-relaxed`}>
-              Securely processing your <span className="text-blue-700 font-extrabold">{selectedIntent}</span> request...
-            </p>
-          </motion.div>
         ) : showPassbook ? (
           /* INSTANT PASSBOOK DASHBOARD UI */
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto border border-slate-100 text-center animate-in fade-in zoom-in duration-300 mt-14">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto border border-slate-100 text-center mt-14"
+          >
             <h2 className={`${montserrat.className} text-xl font-medium text-slate-500 mb-6 uppercase tracking-widest`}>
               Instant Passbook
             </h2>
@@ -713,7 +733,7 @@ export default function EPFOLandingPage() {
             >
               ← Return to Dashboard
             </button>
-          </div>
+          </motion.div>
         ) : (
           /* STEP 4 & STEP 5: SUCCESS RECEIPT CARD (when claimSubmitted is true) */
           <motion.div
