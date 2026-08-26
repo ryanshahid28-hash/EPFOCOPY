@@ -735,10 +735,10 @@ export default function EPFOLandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-3">
             <Building2 className="w-5 h-5 text-blue-400" />
-            <span className="font-semibold text-slate-200">EPFO Modern Portal Shell • Day 1 Interface</span>
+            <span className="font-semibold text-slate-200">EPFO Modern Portal</span>
           </div>
           <p className="text-center sm:text-right text-slate-500">
-            © 2026 Employees' Provident Fund Organisation, India. Designed for speed & trust.
+            © 2026 Employees' Provident Fund Organisation, India. All rights reserved.
           </p>
         </div>
       </footer>
