@@ -333,9 +333,9 @@ export default function EPFOLandingPage() {
 
       {/* 3. HERO SECTION */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-20 flex flex-col justify-center">
-        {/* Hero Header Content (Hidden when logged in) */}
-        {!activeUser && (
-          <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5 mb-8 sm:mb-12">
+        {/* Hero Header Content (Hidden when a service intent is selected) */}
+        {!selectedIntent && (
+          <div className="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5">
             <motion.h1
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -366,9 +366,7 @@ export default function EPFOLandingPage() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className={`grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 transition-all duration-300 ${
-              activeUser ? "mt-4 sm:mt-6" : "mt-2 sm:mt-4"
-            }`}
+            className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
           >
             {/* CARD 1: Check PF Balance */}
             <motion.div
@@ -747,8 +745,8 @@ export default function EPFOLandingPage() {
           </motion.div>
         )}
 
-        {/* 5. TRUST & STATISTICS BANNER (Hidden when logged in) */}
-        {!activeUser && (
+        {/* 5. TRUST & STATISTICS BANNER (Hidden when a service intent is selected) */}
+        {!selectedIntent && (
           <DirectCitizenAssurance montserratClass={montserrat.className} />
         )}
       </main>
